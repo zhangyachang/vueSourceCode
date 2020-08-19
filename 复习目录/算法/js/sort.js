@@ -558,7 +558,6 @@ let sort = (function () {
                 }
             }
 
-
             console.log('当前桶的内容', buckets);
 
             // 遍历桶返回数组
