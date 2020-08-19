@@ -15,36 +15,80 @@ let dataStructure = (function () {
 
     Stack: (function () {
       // console.log('函数执行了吗');
+      let sym = Symbol();
 
       return class {
         constructor() {
-          this.items = [];
+          this[sym] = [];
         }
 
         push(ele) {
-          this.items.push(ele);
+          this[sym].push(ele);
         }
 
         peek() {
-          return this.items[this.items.length - 1];
+          return this[sym][this[sym].length - 1];
         }
 
         pop() {
-          return this.items.pop();
+          return this[sym].pop();
         }
 
         clear() {
-          this.items = [];
+          this[sym] = [];
         }
 
         size() {
-          return this.items.length;
+          return this[sym].length;
         }
 
         print() {
-          this.items.forEach(item => {
+          this[sym].forEach(item => {
             console.log(item);
           });
+        }
+
+      }
+    })(),
+
+
+
+
+    /** 队列的数据结构 */
+
+    /**
+     * enqueue 入队
+     * dequeue 出队
+     * first 返回队首元素，但不删除
+     * clear 清空队列
+     * size 返回队列长度
+     */
+    Queue: (function () {
+      let sym = Symbol();
+
+      return class {
+        constructor() {
+          this[sym] = [];
+        }
+
+        enqueue(item) {
+          this[sym].push(item);
+        }
+
+        dequeue() {
+          return this[sym].shift();
+        }
+
+        first() {
+          return this[sym][0];
+        }
+
+        clear() {
+          this[sym] = [];
+        }
+
+        size() {
+          return this[sym].length;
         }
       }
     })(),
