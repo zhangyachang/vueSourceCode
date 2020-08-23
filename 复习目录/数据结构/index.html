@@ -25,47 +25,34 @@
   <script>
     console.log('dataStructure', dataStructure);
 
-    let link = new dataStructure.LinkList();
-    console.log('link', link);
+    // let set = new dataStructure.LinkList();
 
-    link.append("链表头");
-    link.append("链表元素1号");
-    link.append("链表元素2号");
+    // const set = new Set();
+    // [1, 2, 3, 3, 3, 4, 5].forEach(item => {
+    //   set.add(item);
+    // });
+    // console.log(set);
 
-    // console.log(link.findNodeOrLast('链表11头'));
-
-    let flag = link.insert('链表头', '插入1号元素');
-    // console.log('flag', flag);
-    // let flag1 = link.insert('链表头11', '插入2号元素1');
-    // console.log('flag1', flag1);
-
-    // link.print();
-    // console.log(link.size());
-
-    // console.error('删除元素');
-    // link.remove('链表元素1号11');
-    link.print();
-
-    // console.log('索引元素', link.indexOf('链表元素2号11'));
-
-    // console.log('0号元素', link.findByIndex(4));
+    // let a = 1;
+    // console.log(a === 1);
+    // console.log('代码执行顺序');
 
 
-    // console.log('函数代码执行');
+
+    let a = [1, 2, 3, 4, 5];
+    let b = [2, 3, 4];
+    console.log(a, b);
+
+    console.log(dataStructure.Collection.union(a, b));
+
+    console.log(dataStructure.Collection.intersection(a, b));
+    console.log(dataStructure.Collection.difference(a, b));
+    console.log(dataStructure.Collection.subset(a, b));
 
 
-    // let flag11 = link.insertItemByIndex(4, 'insertItemByIndex元素');
-    // console.log('flag', flag11);
 
-    // link.print();
 
-    // let removeResult = link.removeNodeByIndex(100);
-    // console.error('移除了元素', removeResult);
-    // link.print();
 
-    // for (let i = 0; i < 10; i++) {
-    //   console.log('i = ', i);
-    // }
 
   </script>
 </body>

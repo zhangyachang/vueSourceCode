@@ -463,12 +463,59 @@ let dataStructure = (function () {
           }
           prev.next = node.next;
         }
+      }
+    })(),
 
 
+    /**
+     * 集合结构
+     * 
+     */
+    Collection: (function () {
+
+
+      return {
+        // 并集 交集 差集 子集
+        union(a, b) {
+          return new Set([...a, ...b]);
+        },
+
+        intersection(a, b) {
+          let s = new Set();
+
+          b.forEach(item => {
+            if (a.includes(item)) {
+              s.add(item);
+            }
+          });
+          return s;
+        },
+
+        difference(a, b) {
+          let s = new Set();
+          a.forEach(item => {
+            if (!b.includes(item)) {
+              s.add(item);
+            }
+          });
+          return s;
+        },
+
+        subset(a, b) {
+          for (let item of b) {
+            if (!a.includes(item)) {
+              console.log('走到了');
+              return false;
+            }
+          }
+          
+          return true;
+        }
 
       }
-
     })(),
+
+
 
 
 
