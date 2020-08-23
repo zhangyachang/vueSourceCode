@@ -207,38 +207,256 @@ let dataStructure = (function () {
         // 查找指定的
         find(data) {
           let head = this[HEAD];
-          if (head = null) {
+          if (head === null) {
             return null;
           }
 
           while (head && head.data !== data) {
             head = head.next;
           }
-
-          if (head) {
-            return head.data;
+          if (head !== null) {
+            return head;
           } else {
             return null;
           }
         }
 
         // 查找指定值的点，若不存在则返回最后一项
-        findNodeOrLast(data) {
+        // findNodeOrLast(data) {
+        //   let head = this[HEAD];
 
-        }
+        //   if (head === null) {
+        //     return this[HEAD];
+        //   }
+
+        //   let prev = null;
+        //   while (head && head.data !== data) {
+        //     prev = head;
+        //     head = head.next;
+        //   }
+
+        //   if (head) {
+        //     return head;
+        //   } else {
+        //     return prev;
+        //   }
+        // }
 
         insert(target, data) {
-
           let findNode = this.find(target);
-          if (target) {
-            
+          if (findNode !== null) {
+            let newNode = new Node(data);
+            newNode.next = findNode.next;
+            findNode.next = newNode;
+            return true;
+          } else {
+            return false;
           }
         }
 
+        remove(data) {
+          // console.log('打印字符串');
+          let head = this[HEAD];
+          let prev = null;
+          while (head && head.data !== data) {
+            prev = head;
+            head = head.next;
+          }
+
+          if (head !== null) {
+            if (prev === null) {
+              // 删除首元素
+              this[HEAD] = head.next;
+            } else {
+              // 删除非首元素
+              prev.next = head.next;
+            }
+
+            // 这里就是删除了元素
+          }
+
+          // 这里就是没有删除任何元素
+        }
+
+        print() {
+          let head = this[HEAD];
+          while (head) {
+            console.log(head.data);
+            head = head.next;
+          }
+        }
+
+        size() {
+          let i = 0;
+          let head = this[HEAD];
+
+          while (head) {
+            i++;
+            head = head.next;
+          }
+
+          return i;
+        }
+
+        indexOf(data) {
+          console.log('查找元素对应索引');
+          let head = this[HEAD];
+          let i = 0;
+          while (head && head.data !== data) {
+            head = head.next;
+            i++;
+          }
+          if (head) {
+            return i;
+          } else {
+            return -1;
+          }
+
+          // if (i === 0 && head) {
+          //   return i;
+          // } else if (head === null) {
+          //   return -1;
+          // } else {
+          //   return i;
+          // }
+        }
+
+        findNodeByIndex(index) {
+          if (typeof index !== 'number') {
+            throw Error('index参数是一个数字');
+          }
+
+          let head = this[HEAD];
+          let i = 0;
+          let prev = null;
+          while (head && i !== index) {
+            prev = head;
+            head = head.next;
+            i++;
+          }
+
+          return {
+            node: head,
+            prev: prev
+          };
+        }
+
+        findByIndex(index) {
+          if (typeof index !== 'number') {
+            throw Error('index参数是一个数字');
+          }
+
+          let head = this[HEAD];
+          let i = 0;
+
+          while (head && i !== index) {
+            head = head.next;
+            i++;
+          }
+
+          return head;
+        }
+
+        findByIndexAndPrevNode(index) {
+          if (typeof index !== 'number') {
+            throw Error('index参数是一个数字');
+          }
+
+          let head = this[HEAD];
+          let prev = null;
+          let i = 0;
+
+          while (head && i !== index) {
+            prev = head;
+            head = head.next;
+            i++;
+          }
+
+          if (head !== null) {
+            return {
+              node: head,
+              prev: prev
+            };
+          } else {
+            return {
+              code: -1
+            }
+          }
+
+
+        }
+
+        // 按照索引插入节点
+        insertItemByIndex(index, data) {
+          if (typeof index !== 'number') {
+            throw Error('index参数是一个数字');
+          }
+
+          let newNode = new Node(data);
+          let head = this[HEAD];
+          let i = 0;
+          let prev = null;
+
+          if (index === 0) {
+            newNode.next = head;
+            this[HEAD] = newNode;
+            return {
+              code: 0,
+              msg: '成功'
+            };
+          }
+
+          while (head && i !== index) {
+            prev = head;
+            head = head.next;
+            i++;
+          }
+
+          // console.log('i, index', i, index, 'head', head);
+          if (head === null && i === index) {
+            prev.next = newNode;
+            return {
+              code: 0,
+              msg: '成功'
+            };
+          }
+
+          if (head !== null) {
+            newNode.next = head;
+            prev.next = newNode;
+            return {
+              code: 0,
+              msg: '成功'
+            };
+          } else {
+            return {
+              code: -2,
+              msg: '无此索引'
+            };
+          }
+        }
+
+        // 按照索引移除节点
+        removeNodeByIndex(index) {
+          // console.log('按照索引移除节点', index);
+          let result = this.findByIndexAndPrevNode(index);
+          // console.log('查找结果', result);
+          if (result.code === -1) {
+            return false;
+          }
+          let { prev, node } = result;
+          // console.log('prev', prev, 'node', node);
+
+          if (prev === null) {
+            this[HEAD] = node.next;
+            return true;
+          }
+          prev.next = node.next;
+        }
+
+
+
       }
-
-
-
 
     })(),
 
