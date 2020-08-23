@@ -177,6 +177,7 @@ let dataStructure = (function () {
       console.log('链表');
       let HEAD = Symbol();
 
+      // 定义链表结构
       class Node {
         constructor(data) {
           this.data = data;
@@ -350,11 +351,12 @@ let dataStructure = (function () {
           let i = 0;
 
           while (head && i !== index) {
+            if (i === index) return head;
             head = head.next;
             i++;
           }
 
-          return head;
+          return undefined;
         }
 
         findByIndexAndPrevNode(index) {
@@ -406,34 +408,42 @@ let dataStructure = (function () {
             };
           }
 
-          while (head && i !== index) {
-            prev = head;
-            head = head.next;
-            i++;
-          }
-
-          // console.log('i, index', i, index, 'head', head);
-          if (head === null && i === index) {
-            prev.next = newNode;
-            return {
-              code: 0,
-              msg: '成功'
-            };
-          }
-
-          if (head !== null) {
-            newNode.next = head;
-            prev.next = newNode;
-            return {
-              code: 0,
-              msg: '成功'
-            };
+          let beforeNode = this.findByIndex(index - 1);
+          if (beforeNode) {
+            newNode.next = beforeNode.next;
+            beforeNode.next = newNode;
           } else {
-            return {
-              code: -2,
-              msg: '无此索引'
-            };
+            throw new Error('beforeNode节点不存在');
           }
+
+          // while (head && i !== index) {
+          //   prev = head;
+          //   head = head.next;
+          //   i++;
+          // }
+
+          // // console.log('i, index', i, index, 'head', head);
+          // if (head === null && i === index) {
+          //   prev.next = newNode;
+          //   return {
+          //     code: 0,
+          //     msg: '成功'
+          //   };
+          // }
+
+          // if (head !== null) {
+          //   newNode.next = head;
+          //   prev.next = newNode;
+          //   return {
+          //     code: 0,
+          //     msg: '成功'
+          //   };
+          // } else {
+          //   return {
+          //     code: -2,
+          //     msg: '无此索引'
+          //   };
+          // }
         }
 
         // 按照索引移除节点
