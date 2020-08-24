@@ -192,13 +192,15 @@ let dataStructure = (function () {
 
         // 链尾添加节点 append
         append(data) {
+          let head = this[HEAD];
           let newNode = new Node(data);
-          if (!this[HEAD]) {
+          console.log('head', head);
+          if (head === null) {
             this[HEAD] = newNode;
             return;
           }
 
-          let head = this[HEAD];
+
           while (head.next) {
             head = head.next;
           }
@@ -508,7 +510,7 @@ let dataStructure = (function () {
               return false;
             }
           }
-          
+
           return true;
         }
 
@@ -516,6 +518,279 @@ let dataStructure = (function () {
     })(),
 
 
+    // 字典
+    Map: (function () {
+      console.log('字典数据结构');
+      const sym = Symbol();
+
+      return class {
+        constructor() {
+          this[sym] = [];
+        }
+
+        set(key, value) {
+          console.log(key, value);
+          for (let item of this[sym]) {
+            console.log(item);
+            if (item[0] === key) {
+              item[1] = value;
+              return;
+            }
+          }
+
+          this[sym].push([key, value]);
+        }
+
+        get(key) {
+          for (let item of this[sym]) {
+            if (item[0] === key) {
+              return item[1];
+            }
+          }
+          return undefined;
+        }
+
+        delete(key) {
+          console.log('删除', key)
+          for (let i = 0, len = this[sym].length; i < len; i++) {
+            if (this[sym][i][0] === key) {
+              this[sym].splice(i, 1);
+              return;
+            }
+          }
+        }
+
+        has(key) {
+          for (let item of this[sym]) {
+            if (item[0] === key) {
+              return true;
+            }
+          }
+          return false;
+        }
+
+        size() {
+          return this[sym].length;
+        }
+      }
+    })(),
+
+
+    // 哈希表
+    HashTable: (function () {
+      console.log('HashTable');
+      let sym = Symbol();
+
+      // let link = new dataStructure.LinkList();
+      // console.log(link);
+
+      let LinkList = (function () {
+        let HEAD = Symbol();
+
+        class Node {
+          constructor(data) {
+            this.data = data;
+            this.next = null;
+          }
+        }
+
+        // 类
+        return class {
+          constructor() {
+            this[HEAD] = null;
+          }
+
+          append(data) {
+            // console.log('data', data);
+            // console.log('head', JSON.parse(JSON.stringify(this[HEAD])));
+
+            let head = this[HEAD];
+            let newNode = new Node(data);
+            if (head === null) {
+              this[HEAD] = newNode;
+              return;
+            }
+
+
+            while (true) {
+              if (head.data.key === data.key) {
+                head.data.value = data.value;
+                return;
+              }
+              if (head.next === null) {
+                break;
+              } else {
+                head = head.next;
+              }
+            }
+
+            head.next = newNode;
+          }
+
+          // 取值
+          find(index) {
+            let head = this[HEAD];
+            let i = 0;
+            while (head) {
+              if (i === index) return head;
+              head = head.next;
+              i++;
+            }
+            return null;
+          }
+
+          // 移除
+          remove(index) {
+            // 当前index 所对应的索引
+            let nodeB = this.find(index - 1);
+            let nodeA = this.find(index + 1);
+            if (index === 0) {
+              this[HEAD] = nodeA;
+            } else {
+              nodeB && (nodeB.next = nodeA);
+            }
+          }
+
+          // 长度
+          size() {
+            let head = this[HEAD];
+            let i = 0;
+            while (head.next) {
+              head = head.next;
+              i++;
+            }
+            return i;
+          }
+
+          // 返回头
+          getHead() {
+            return this[HEAD];
+          }
+        }
+
+      })();
+
+
+
+      // Hash 函数
+      function Hash(key) {
+        let hash = 0;
+        [...key].forEach(v => {
+          hash += v.charCodeAt();
+        });
+        return hash % 37;
+      }
+
+      // 用于链表存值的类
+      class ValuePair {
+        constructor(key, value) {
+          this.key = key;
+          this.value = value;
+        }
+      }
+
+      return class {
+        constructor() {
+          this[sym] = [];
+        }
+
+        // 使用链表解决冲突
+        set(key, value) {
+          let hash = Hash(key);
+          if (this[sym][hash] === undefined) {
+            this[sym][hash] = new LinkList();
+          }
+          this[sym][hash].append(new ValuePair(key, value));
+        }
+
+        get(key) {
+          let hash = Hash(key);
+
+          if (!this[sym][hash]) {
+            return undefined;
+          }
+
+          let head = this[sym][hash].getHead();
+          while (head) {
+            if (head.data.key === key) {
+              return head.data.value;
+            }
+            head = head.next;
+          }
+          return undefined;
+        }
+
+      }
+    })(),
+
+    /**
+     * 哈希表2
+     */
+    HashTable1: (function () {
+      console.log('哈希表2');
+      let sym = Symbol();
+
+      function Hash(str) {
+        let hash = 0;
+        [...str].forEach(v => {
+          hash += v.charCodeAt();
+        });
+        return hash % 37;
+      }
+
+      class ValuePair {
+        constructor(key, value) {
+          this.key = key;
+          this.value = value;
+        }
+      }
+
+      return class {
+        constructor() {
+          this[sym] = [];
+        }
+
+        set(key, value) {
+          let hash = Hash(key);
+          let i = hash;
+          console.log('hash', hash);
+
+          while (this[sym][hash]) {
+            if (this[sym][hash].key === key) {
+              this[sym][hash].value = value;
+              return;
+            }
+
+            hash = (hash + 1) % 37;
+
+            if (i === hash) {
+              // throw Error('哈希表已用完');
+              console.error('哈希表已用完');
+              return;
+            }
+          }
+
+          this[sym][hash] = new ValuePair(key, value);
+        }
+
+        get(key) {
+          let hash = Hash(key);
+          let i = hash;
+
+          while (this[sym][hash]) {
+            if (this[sym][hash].key === key) {
+              return this[sym][hash].value;
+            }
+            hash = (hash + 1) % 37;
+            if (i === hash) {
+              throw new Error('不存在该内容');
+            }
+          }
+
+          return undefined;
+        }
+      }
+    })(),
 
 
 
